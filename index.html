@@ -1,0 +1,1551 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ebook Taller 2: Asistentes Virtuales, Agentes, Chatbots y Tutores Inteligentes - Profe Vane</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Dancing+Script:wght@700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --vane-pink: #e6007e;
+            --vane-dark-pink: #c20068;
+            --vane-light-pink: #fce4f0;
+            --vane-cream: #f7f5ee;
+            --vane-ink: #1e1e1e;
+        }
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #2c2629;
+            color: var(--vane-ink);
+        }
+        .font-signature {
+            font-family: 'Dancing Script', cursive;
+        }
+        .font-mono-code {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        /* Estilo de cada página del Ebook (Proporción presentación / Ebook de Profe Vane) */
+        .ebook-page {
+            background-color: var(--vane-cream);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+            border-radius: 16px;
+            margin-bottom: 2.5rem;
+            border: 1px solid rgba(230, 0, 126, 0.15);
+            min-height: 760px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        /* Decoración de circuitos tipo marca de agua en esquinas */
+        .circuit-bg-top {
+            position: absolute;
+            top: -15px;
+            right: -15px;
+            width: 220px;
+            height: 220px;
+            opacity: 0.14;
+            pointer-events: none;
+        }
+        .circuit-bg-bottom {
+            position: absolute;
+            bottom: 45px;
+            left: -15px;
+            width: 180px;
+            height: 180px;
+            opacity: 0.12;
+            pointer-events: none;
+        }
+        .pink-pill {
+            background: linear-gradient(135deg, #ff1493 0%, #d8006c 100%);
+            color: white;
+            box-shadow: 0 6px 18px rgba(230, 0, 126, 0.3);
+        }
+        .prompt-box {
+            background-color: #ffffff;
+            border-left: 6px solid var(--vane-pink);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+        }
+        /* Reglas para impresión / guardado directo como PDF */
+        @media print {
+            body {
+                background-color: white !important;
+            }
+            .no-print {
+                display: none !important;
+            }
+            .ebook-page {
+                box-shadow: none !important;
+                margin-bottom: 0 !important;
+                border-radius: 0 !important;
+                border: none !important;
+                page-break-after: always;
+                min-height: 100vh;
+            }
+        }
+    </style>
+</head>
+<body class="py-6 px-3 sm:px-6">
+
+    <!-- BARRA DE HERRAMIENTAS SUPERIOR (No sale al imprimir a PDF) -->
+    <nav class="no-print max-w-4xl mx-auto mb-6 bg-white/95 backdrop-blur-md rounded-2xl p-4 shadow-2xl border border-pink-200 flex flex-wrap items-center justify-between gap-4 sticky top-4 z-50">
+        <div class="flex items-center gap-3">
+            <span class="w-10 h-10 rounded-xl pink-pill flex items-center justify-center font-black text-lg">T2</span>
+            <div>
+                <h1 class="font-extrabold text-slate-900 text-sm sm:text-base">Ebook Taller 2 • Vanesa Ferreyra®</h1>
+                <p class="text-xs text-slate-500">24 páginas • Prompts copiables + Demos interactivos incluidos</p>
+            </div>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2">
+            <select onchange="irASeccion(this.value)" class="text-xs bg-pink-50 border border-pink-300 text-pink-900 font-semibold rounded-xl px-3 py-2 focus:outline-none">
+                <option value="">📖 Ir a sección...</option>
+                <option value="pag-1">Portada Taller 2</option>
+                <option value="pag-3">¿Qué son los Recursos Conversacionales?</option>
+                <option value="pag-5">1. Asistentes Virtuales Educativos</option>
+                <option value="pag-9">2. Agentes Especializados</option>
+                <option value="pag-13">3. Chatbots para Repaso</option>
+                <option value="pag-17">4. Tutores Inteligentes y Bots para Casos</option>
+                <option value="pag-21">Seguridad, Ética y Human in the Loop</option>
+                <option value="pag-23">Checklist antes de publicar</option>
+            </select>
+            <button onclick="abrirSimuladorBots()" class="px-3.5 py-2 rounded-xl bg-pink-100 hover:bg-pink-200 text-pink-800 font-bold text-xs transition flex items-center gap-1.5 border border-pink-300">
+                🤖 Probar Demos en Vivo
+            </button>
+            <button onclick="window.print()" class="px-4 py-2 rounded-xl pink-pill font-bold text-xs transition hover:opacity-95 flex items-center gap-1.5 cursor-pointer">
+                🖨️ Descargar / Imprimir PDF
+            </button>
+        </div>
+    </nav>
+
+    <!-- CONTENEDOR DE PÁGINAS DEL EBOOK -->
+    <main class="max-w-4xl mx-auto">
+
+        <!-- ==========================================
+             PÁGINA 1: PORTADA
+             ========================================== -->
+        <section id="pag-1" class="ebook-page p-8 sm:p-12">
+            <!-- SVG Circuito esquina -->
+            <svg class="circuit-bg-top" viewBox="0 0 200 200" fill="none" stroke="#e6007e" stroke-width="2">
+                <path d="M10 10 H80 L110 40 H190 M40 10 V70 L70 100 V180 M10 50 H60 L90 80 H160"/>
+                <circle cx="190" cy="40" r="5" fill="#e6007e"/>
+                <circle cx="70" cy="180" r="5" fill="#e6007e"/>
+                <circle cx="160" cy="80" r="5" fill="#e6007e"/>
+            </svg>
+
+            <div class="flex justify-between items-start z-10">
+                <div class="inline-flex items-center gap-2 border-2 border-slate-800 rounded-xl px-4 py-2 bg-white shadow-sm">
+                    <span class="text-pink-600 text-lg">♡</span>
+                    <div class="text-xs font-extrabold tracking-widest leading-none text-slate-900">
+                        VANESA<br>FERREYRA<span class="text-[9px] align-top">®</span>
+                    </div>
+                </div>
+                <span class="pink-pill px-6 py-2 rounded-full font-extrabold text-lg tracking-wide">
+                    Taller 2
+                </span>
+            </div>
+
+            <div class="my-auto py-8 grid grid-cols-1 md:grid-cols-12 gap-8 items-center z-10">
+                <div class="md:col-span-7 space-y-5">
+                    <div class="inline-flex items-center gap-2 bg-pink-100 text-pink-800 px-3.5 py-1.5 rounded-full text-xs font-bold border border-pink-200">
+                        🤖 Ciclo de IA aplicada a la Educación en Salud
+                    </div>
+                    <h1 class="text-4xl sm:text-5xl font-black text-slate-900 leading-[1.1] tracking-tight">
+                        Asistentes virtuales, <span class="text-[#e6007e]">agentes, chatbots</span> y tutores inteligentes
+                    </h1>
+                    <p class="text-lg sm:text-xl text-slate-700 font-medium leading-relaxed border-l-4 border-[#e6007e] pl-4">
+                        Diseñá recursos conversacionales para orientar, acompañar y enriquecer el aprendizaje de tus estudiantes en salud.
+                    </p>
+                </div>
+
+                <!-- Ilustración Avatar + Robotito estilo Flyer Taller 2 -->
+                <div class="md:col-span-5 flex flex-col items-center justify-center relative">
+                    <div class="w-64 h-64 rounded-full bg-gradient-to-tr from-pink-200 via-pink-100 to-white border-4 border-white shadow-2xl flex flex-col items-center justify-center p-6 text-center relative">
+                        <div class="text-7xl mb-2">👩‍🏫🤖</div>
+                        <span class="bg-white px-4 py-1.5 rounded-full shadow-md text-xs font-extrabold text-[#e6007e] border border-pink-200">
+                            IDEAS • TECNOLOGÍA • MEJORES APRENDIZAJES ♡
+                        </span>
+                        <!-- Burbuja de diálogo flotante -->
+                        <div class="absolute -top-3 -right-3 pink-pill px-3.5 py-2 rounded-2xl rounded-bl-none font-black text-sm shadow-lg">
+                            💬 ¡Hola, Profe!
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer de página -->
+            <div class="border-t-2 border-pink-200 pt-4 flex justify-between items-center z-10">
+                <span class="text-xs font-bold text-slate-600">www.vanesaferreyra.com.ar</span>
+                <div class="flex items-center gap-4">
+                    <span class="font-signature text-2xl text-[#e6007e]">Profe Vane ♥</span>
+                    <span class="pink-pill w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm">1</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             PÁGINA 2: HOJA DE RUTA DEL TALLER 2
+             ========================================== -->
+        <section id="pag-2" class="ebook-page p-8 sm:p-12">
+            <div class="z-10 space-y-6">
+                <div class="inline-block bg-pink-100 text-[#e6007e] font-extrabold px-4 py-1.5 rounded-full text-xs uppercase tracking-wider">
+                    Hoja de Ruta • Taller 2
+                </div>
+                <h2 class="text-3xl sm:text-4xl font-black text-slate-900">
+                    VAS A APRENDER A CREAR:
+                </h2>
+
+                <div class="grid grid-cols-1 gap-4 pt-2">
+                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-pink-100 flex items-center gap-4">
+                        <span class="w-12 h-12 rounded-full pink-pill flex items-center justify-center font-black text-xl shrink-0">1</span>
+                        <div>
+                            <h3 class="font-extrabold text-lg text-slate-900">Asistentes virtuales educativos</h3>
+                            <p class="text-sm text-slate-600">Responden dudas frecuentes sobre la cursada, cronogramas, guías de trabajos prácticos y reglamentos de prácticas hospitalarias 24/7.</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-pink-100 flex items-center gap-4">
+                        <span class="w-12 h-12 rounded-full pink-pill flex items-center justify-center font-black text-xl shrink-0">2</span>
+                        <div>
+                            <h3 class="font-extrabold text-lg text-slate-900">Agentes especializados</h3>
+                            <p class="text-sm text-slate-600">Configurados para tareas concretas: auditar registros de enfermería, verificar listas de cotejo (checklists), revisar pases de guardia SBAR o analizar planes de cuidado.</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-pink-100 flex items-center gap-4">
+                        <span class="w-12 h-12 rounded-full pink-pill flex items-center justify-center font-black text-xl shrink-0">3</span>
+                        <div>
+                            <h3 class="font-extrabold text-lg text-slate-900">Chatbots para repaso</h3>
+                            <p class="text-sm text-slate-600">Entrenadores interactivos que formulan preguntas graduales, ofrecen pistas pedagógicas y explican los errores basándose en la bibliografía de la cátedra.</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-pink-100 flex items-center gap-4">
+                        <span class="w-12 h-12 rounded-full pink-pill flex items-center justify-center font-black text-xl shrink-0">4</span>
+                        <div>
+                            <h3 class="font-extrabold text-lg text-slate-900">Tutores inteligentes y bots para casos</h3>
+                            <p class="text-sm text-slate-600">Simulan ser un paciente en entrevista clínica o un tutor socrático que guía el razonamiento clínico sin regalar la respuesta.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-pink-50 border-2 border-pink-200 rounded-2xl p-5 flex items-center gap-4">
+                    <span class="text-3xl">🎯</span>
+                    <p class="text-sm sm:text-base font-bold text-pink-950">
+                        Ideal para tutorías, estudio autónomo y acompañamiento personalizado de las trayectorias de aprendizaje.
+                    </p>
+                </div>
+            </div>
+
+            <div class="border-t-2 border-pink-200 pt-4 flex justify-between items-center z-10">
+                <span class="text-xs font-bold text-slate-600">www.vanesaferreyra.com.ar</span>
+                <div class="flex items-center gap-4">
+                    <span class="font-signature text-2xl text-[#e6007e]">Profe Vane ♥</span>
+                    <span class="pink-pill w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm">2</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             PÁGINA 3: ¿QUÉ ES UN RECURSO CONVERSACIONAL?
+             ========================================== -->
+        <section id="pag-3" class="ebook-page p-8 sm:p-12">
+            <div class="z-10 my-auto space-y-6">
+                <span class="text-xs font-extrabold uppercase tracking-widest text-[#e6007e]">Fundamentos Pedagógicos</span>
+                <h2 class="text-3xl sm:text-4xl font-black text-slate-900">
+                    Del aprendizaje pasivo al diálogo pedagógico
+                </h2>
+                <p class="text-base sm:text-lg text-slate-700 leading-relaxed bg-white p-6 rounded-2xl shadow-sm border border-pink-100">
+                    Un <strong>recurso conversacional educativo</strong> no es un buscador que entrega respuestas cerradas. Es un entorno diseñado intencionalmente por el docente donde el estudiante <strong>pregunta, argumenta, decide y recibe orientación inmediata</strong> alineada con los objetivos de la asignatura.
+                </p>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="bg-white p-5 rounded-2xl border-t-4 border-[#e6007e] shadow-sm">
+                        <h3 class="font-extrabold text-slate-900 mb-2">💬 ¿Qué es un Chatbot / Asistente?</h3>
+                        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                            Interactúa mediante lenguaje natural o botones guiados para responder consultas, organizar información o guiar un repaso estructurado sobre un documento oficial.
+                        </p>
+                    </div>
+                    <div class="bg-white p-5 rounded-2xl border-t-4 border-purple-600 shadow-sm">
+                        <h3 class="font-extrabold text-slate-900 mb-2">⚙️ ¿Qué es un Agente o Tutor Inteligente?</h3>
+                        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                            Tiene un <strong>rol asignado, reglas de actuación y un método pedagógico</strong> (por ejemplo, método socrático o simulación de paciente): evalúa lo que dice el estudiante y adapta su próxima intervención.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="p-5 rounded-2xl bg-slate-900 text-white flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div>
+                        <span class="text-pink-400 font-bold text-xs uppercase">Principio clave de Profe Vane</span>
+                        <p class="text-sm font-semibold mt-1">La IA no reemplaza el criterio docente: amplifica nuestra presencia cuando el estudiante estudia solo en casa.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-t-2 border-pink-200 pt-4 flex justify-between items-center z-10">
+                <span class="text-xs font-bold text-slate-600">www.vanesaferreyra.com.ar</span>
+                <div class="flex items-center gap-4">
+                    <span class="font-signature text-2xl text-[#e6007e]">Profe Vane ♥</span>
+                    <span class="pink-pill w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm">3</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             PÁGINA 4: LOS 3 PASOS PARA DISEÑAR TU BOT
+             ========================================== -->
+        <section id="pag-4" class="ebook-page p-8 sm:p-12">
+            <div class="z-10 my-auto space-y-6">
+                <h2 class="text-3xl font-black text-slate-900 text-center">
+                    3 Pasos antes de escribir tu Prompt
+                </h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                    <!-- Paso 1 -->
+                    <div class="bg-white p-6 rounded-2xl shadow-md border border-pink-100 flex flex-col justify-between">
+                        <div>
+                            <span class="pink-pill px-3 py-1 rounded-full text-xs font-black">Paso 1</span>
+                            <h3 class="font-black text-xl text-slate-900 mt-3 mb-2">Seleccioná tu Fuente de Conocimiento</h3>
+                            <p class="text-xs text-slate-600 mb-3">El bot solo debe hablar con respaldo en tus documentos validados:</p>
+                            <ul class="text-xs space-y-1.5 text-slate-700 font-semibold list-disc pl-4">
+                                <li>Programa de la materia</li>
+                                <li>Protocolo clínico / Guía ministerial</li>
+                                <li>Rúbrica o lista de cotejo</li>
+                                <li>Ficha farmacológica o manual</li>
+                            </ul>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-slate-100 text-[11px] text-[#e6007e] font-bold">
+                            📚 Sin fuente clara, hay riesgo de alucinación.
+                        </div>
+                    </div>
+
+                    <!-- Paso 2 -->
+                    <div class="bg-white p-6 rounded-2xl shadow-md border border-pink-100 flex flex-col justify-between">
+                        <div>
+                            <span class="pink-pill px-3 py-1 rounded-full text-xs font-black">Paso 2</span>
+                            <h3 class="font-black text-xl text-slate-900 mt-3 mb-2">Definí el Rol y los Límites del Bot</h3>
+                            <p class="text-xs text-slate-600 mb-3">¿Cómo debe comportarse con el estudiante?</p>
+                            <ul class="text-xs space-y-1.5 text-slate-700 font-semibold list-disc pl-4">
+                                <li>¿Da la respuesta o hace preguntas?</li>
+                                <li>¿Qué tono utiliza (empático, formal, paciente)?</li>
+                                <li>¿Qué cosas tiene PROHIBIDO hacer (ej. dar consejos médicos reales)?</li>
+                            </ul>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-slate-100 text-[11px] text-[#e6007e] font-bold">
+                            🛡️ Los límites cuidan la seguridad pedagógica.
+                        </div>
+                    </div>
+
+                    <!-- Paso 3 -->
+                    <div class="bg-white p-6 rounded-2xl shadow-md border border-pink-100 flex flex-col justify-between">
+                        <div>
+                            <span class="pink-pill px-3 py-1 rounded-full text-xs font-black">Paso 3</span>
+                            <h3 class="font-black text-xl text-slate-900 mt-3 mb-2">Elegí la Modalidad de Entrega</h3>
+                            <p class="text-xs text-slate-600 mb-3">Según la conectividad y dispositivos de tus alumnos:</p>
+                            <ul class="text-xs space-y-1.5 text-slate-700 font-semibold list-disc pl-4">
+                                <li><strong>En la nube:</strong> Gems de Gemini, GPTs personalizados, Poe o Copilot.</li>
+                                <li><strong>Descargable Offline (HTML):</strong> Bot interactivo autocontenido en un archivo `index.html` usando Canvas.</li>
+                            </ul>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-slate-100 text-[11px] text-[#e6007e] font-bold">
+                            💻 ¡Ambos se diseñan con el mismo rigor!
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-t-2 border-pink-200 pt-4 flex justify-between items-center z-10">
+                <span class="text-xs font-bold text-slate-600">www.vanesaferreyra.com.ar</span>
+                <div class="flex items-center gap-4">
+                    <span class="font-signature text-2xl text-[#e6007e]">Profe Vane ♥</span>
+                    <span class="pink-pill w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm">4</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             PÁGINA 5: 1. ASISTENTES VIRTUALES EDUCATIVOS
+             ========================================== -->
+        <section id="pag-5" class="ebook-page p-8 sm:p-12">
+            <div class="z-10 my-auto space-y-6">
+                <div class="flex items-center gap-3">
+                    <span class="w-12 h-12 rounded-2xl pink-pill flex items-center justify-center font-black text-2xl">1</span>
+                    <div>
+                        <span class="text-xs font-extrabold uppercase tracking-wider text-[#e6007e]">Recurso Conversacional #1</span>
+                        <h2 class="text-3xl font-black text-slate-900">Asistentes Virtuales Educativos</h2>
+                    </div>
+                </div>
+
+                <p class="text-base text-slate-700 bg-white p-5 rounded-2xl border border-pink-100 shadow-sm">
+                    Un <strong>Asistente Virtual Educativo</strong> acompaña a estudiantes y profesionales en procesos complejos como el desarrollo de <strong>proyectos de investigación, tesinas, escritura académica o prácticas clínicas</strong>, ofreciendo una guía estructurada paso a paso.
+                </p>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="bg-white p-5 rounded-2xl border border-slate-200">
+                        <h3 class="font-extrabold text-sm text-[#e6007e] uppercase mb-2">✨ Caso Real: Asistente de Investigación en Enfermería</h3>
+                        <ul class="text-xs space-y-2 text-slate-700 list-disc pl-4">
+                            <li><strong>Formulación y coherencia metodológica:</strong> evalúa la alineación entre problema, pregunta, objetivos, variables e instrumentos.</li>
+                            <li><strong>Búsqueda de evidencia y normas:</strong> orienta en bases científicas (PubMed, CINAHL, SciELO, Cochrane, Scopus) y normas APA / Vancouver.</li>
+                            <li><strong>Respuesta en 4 pasos fijos:</strong> 1️⃣ Análisis, 2️⃣ Observaciones, 3️⃣ Sugerencias de mejora y 4️⃣ Ejemplo corregido.</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-pink-50 p-5 rounded-2xl border border-pink-200 flex flex-col justify-between">
+                        <div>
+                            <h3 class="font-extrabold text-sm text-pink-900 uppercase mb-2">💡 Ventaja Pedagógica</h3>
+                            <p class="text-xs text-pink-950 leading-relaxed">
+                                Desbloquea la "hoja en blanco" cuando el estudiante redacta su protocolo o tesina: no le escribe el trabajo, sino que actúa como un revisor académico que señala por qué mejorar la coherencia metodológica y muestra un ejemplo claro.
+                            </p>
+                        </div>
+                        <button onclick="abrirSimuladorBots('asistente')" class="no-print mt-4 w-full py-2.5 rounded-xl pink-pill font-bold text-xs cursor-pointer">
+                            ▶ Probar Asistente de Investigación en Vivo
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-t-2 border-pink-200 pt-4 flex justify-between items-center z-10">
+                <span class="text-xs font-bold text-slate-600">www.vanesaferreyra.com.ar</span>
+                <div class="flex items-center gap-4">
+                    <span class="font-signature text-2xl text-[#e6007e]">Profe Vane ♥</span>
+                    <span class="pink-pill w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm">5</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             PÁGINA 6: PROMPT PLANTILLA EDITABLE ASISTENTE DE INVESTIGACIÓN (PARTE 1)
+             ========================================== -->
+        <section id="pag-6" class="ebook-page p-8 sm:p-12">
+            <div class="z-10 my-auto space-y-4">
+                <div class="flex flex-wrap justify-between items-center gap-2">
+                    <div>
+                        <span class="text-xs font-extrabold uppercase text-[#e6007e]">Plantilla Editable • Hacé clic en los campos resaltados para adaptarla</span>
+                        <h2 class="text-2xl font-black text-slate-900">Prompt Adaptable: Asistente de Investigación (Parte 1)</h2>
+                    </div>
+                    <button onclick="copiarPromptCompletoInvestigacion()" class="no-print px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs cursor-pointer">
+                        📋 Copiar Prompt Completo
+                    </button>
+                </div>
+
+                <div id="prompt-investigacion-parte1" class="prompt-box p-5 rounded-2xl font-mono-code text-[11px] leading-relaxed text-slate-800 space-y-2.5">
+                    <p>Actuá como experto en <span contenteditable="true" class="bg-pink-100/90 text-pink-900 font-bold px-1.5 py-0.5 rounded border border-pink-300 focus:bg-white">investigación en enfermería, con formación en metodología científica, epidemiología y práctica clínica basada en evidencia</span>.</p>
+                    <div>
+                        <p class="font-bold">Tenés experiencia como:</p>
+                        <ul class="list-disc pl-5 space-y-0.5">
+                            <li>Director de tesis y Revisor académico</li>
+                            <li>Investigador clínico en <span contenteditable="true" class="bg-pink-100/90 text-pink-900 font-bold px-1.5 py-0.5 rounded border border-pink-300 focus:bg-white">enfermería</span></li>
+                            <li>Docente universitario</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <p class="font-bold">Con dominio de:</p>
+                        <p>• diseño metodológico • revisión bibliográfica • análisis de datos • redacción académica • normas <span contenteditable="true" class="bg-pink-100/90 text-pink-900 font-bold px-1.5 py-0.5 rounded border border-pink-300 focus:bg-white">APA / Vancouver</span></p>
+                    </div>
+
+                    <div class="border-t border-pink-200 pt-2">
+                        <p class="font-bold text-[#e6007e]">OBJETIVO</p>
+                        <p>Tu objetivo es asistir a <span contenteditable="true" class="bg-pink-100/90 text-pink-900 font-bold px-1.5 py-0.5 rounded border border-pink-300 focus:bg-white">profesionales y estudiantes de enfermería</span> en el desarrollo de investigaciones científicas. Debés poder ayudar en:</p>
+                        <p>• formulación de preguntas de investigación • desarrollo de proyectos • revisión crítica de tesis • mejora de redacción académica • búsqueda de evidencia científica • análisis metodológico • interpretación de resultados</p>
+                    </div>
+
+                    <div class="border-t border-pink-200 pt-2 space-y-1.5">
+                        <p class="font-bold text-[#e6007e]">TAREAS QUE DEBÉS PODER REALIZAR</p>
+                        <p><strong>1. Formulación de investigación:</strong> Ayudar a construir: problema de investigación, pregunta de investigación, objetivos generales y específicos, hipótesis.</p>
+                        <p><strong>2. Revisión de proyectos o tesis:</strong> Cuando el usuario envíe un texto, debés detectar errores metodológicos, mejorar redacción académica y evaluar coherencia entre: <em>problema, objetivos, diseño metodológico, variables e instrumentos</em>. Si hay errores, explicar por qué y proponer mejoras.</p>
+                        <p><strong>3. Marco teórico:</strong> Podés sugerir conceptos clave, recomendar literatura científica, ayudar a estructurar el marco teórico y mejorar redacción académica.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-t-2 border-pink-200 pt-4 flex justify-between items-center z-10">
+                <span class="text-xs font-bold text-slate-600">www.vanesaferreyra.com.ar</span>
+                <div class="flex items-center gap-4">
+                    <span class="font-signature text-2xl text-[#e6007e]">Profe Vane ♥</span>
+                    <span class="pink-pill w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm">6</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             PÁGINA 7: PROMPT PLANTILLA EDITABLE ASISTENTE DE INVESTIGACIÓN (PARTE 2)
+             ========================================== -->
+        <section id="pag-7" class="ebook-page p-8 sm:p-12">
+            <div class="z-10 my-auto space-y-4">
+                <div class="flex flex-wrap justify-between items-center gap-2">
+                    <div>
+                        <span class="text-xs font-extrabold uppercase text-[#e6007e]">...continuación de la Plantilla Editable</span>
+                        <h2 class="text-xl font-black text-slate-900">Diseño Metodológico, Evidencia y Formato Estructurado</h2>
+                    </div>
+                    <button onclick="copiarPromptCompletoInvestigacion()" class="no-print px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs cursor-pointer">
+                        📋 Copiar Prompt Completo (Partes 1 + 2)
+                    </button>
+                </div>
+
+                <div id="prompt-investigacion-parte2" class="prompt-box p-5 rounded-2xl font-mono-code text-[11px] leading-relaxed text-slate-800 space-y-2">
+                    <p><strong>4. Diseño metodológico:</strong> Ayudar a definir: tipo de estudio, población, muestra, criterios de inclusión y exclusión, variables, instrumentos de recolección de datos y análisis estadístico.</p>
+
+                    <p><strong>5. Búsqueda de evidencia científica:</strong> Cuando el usuario solicite artículos: priorizar literatura científica reciente, incluir DOI si es posible y priorizar bases como: <span contenteditable="true" class="bg-pink-100/90 text-pink-900 font-bold px-1.5 py-0.5 rounded border border-pink-300 focus:bg-white">PubMed, Scopus, CINAHL, Cochrane, SciELO</span>.</p>
+
+                    <p><strong>6. Análisis de datos:</strong> Podés ayudar a interpretar: análisis descriptivo, correlaciones, chi cuadrado, t de student y análisis de resultados. Explicar siempre en lenguaje claro para <span contenteditable="true" class="bg-pink-100/90 text-pink-900 font-bold px-1.5 py-0.5 rounded border border-pink-300 focus:bg-white">estudiantes de enfermería</span>.</p>
+
+                    <p><strong>7. Redacción académica:</strong> Mejorar coherencia, estructura, lenguaje científico y claridad conceptual.</p>
+
+                    <div class="border-t border-pink-200 pt-2">
+                        <p class="font-bold text-[#e6007e]">FORMATO DE RESPUESTA</p>
+                        <p>Siempre responder de forma estructurada:<br>
+                        1️⃣ <strong>Análisis</strong><br>
+                        2️⃣ <strong>Observaciones</strong><br>
+                        3️⃣ <strong>Sugerencias de mejora</strong><br>
+                        4️⃣ <strong>Ejemplo corregido</strong></p>
+                    </div>
+
+                    <div class="border-t border-pink-200 pt-2">
+                        <p class="font-bold text-[#e6007e]">IMPORTANTE</p>
+                        <p>No inventar artículos científicos. Cuando no haya evidencia clara, indicarlo. Evitar afirmaciones sin respaldo científico.</p>
+                    </div>
+                </div>
+
+                <div class="bg-pink-50 p-3.5 rounded-2xl border border-pink-200 text-xs text-pink-950">
+                    <strong>💡 Tip de Profe Vane:</strong> Podés adaptar esta misma plantilla para otras materias cambiando únicamente los bloques resaltados en rosa (por ejemplo: <em>"experto en farmacología clínica"</em> o <em>"experto en gestión de servicios de enfermería"</em>).
+                </div>
+            </div>
+
+            <div class="border-t-2 border-pink-200 pt-4 flex justify-between items-center z-10">
+                <span class="text-xs font-bold text-slate-600">www.vanesaferreyra.com.ar</span>
+                <div class="flex items-center gap-4">
+                    <span class="font-signature text-2xl text-[#e6007e]">Profe Vane ♥</span>
+                    <span class="pink-pill w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm">7</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             PÁGINA 8: EJEMPLO VISUAL ASISTENTE DE INVESTIGACIÓN
+             ========================================== -->
+        <section id="pag-8" class="ebook-page p-8 sm:p-12">
+            <div class="z-10 my-auto space-y-5">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <span class="text-xs font-extrabold uppercase text-[#e6007e]">Vista Previa en Acción</span>
+                        <h2 class="text-2xl font-black text-slate-900">Ejemplo: Asistente de Investigación Evaluando un Objetivo</h2>
+                    </div>
+                </div>
+
+                <!-- Mockup de Interfaz del Asistente de Investigación -->
+                <div class="bg-white rounded-2xl shadow-xl border-2 border-pink-200 overflow-hidden">
+                    <div class="pink-pill px-5 py-3 flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <span class="w-9 h-9 rounded-full bg-white text-[#e6007e] flex items-center justify-center text-lg font-bold">🔬</span>
+                            <div>
+                                <h4 class="font-extrabold text-sm">Asistente Experto en Investigación en Enfermería</h4>
+                                <p class="text-[10px] opacity-90">Metodología Científica • Epidemiología • EBE • APA / Vancouver</p>
+                            </div>
+                        </div>
+                        <span class="bg-white/20 px-2.5 py-1 rounded-full text-[10px] font-bold">Respuesta en 4 Pasos</span>
+                    </div>
+
+                    <div class="p-5 space-y-3 bg-slate-50 text-xs">
+                        <div class="flex gap-2.5 items-start justify-end">
+                            <div class="bg-pink-600 text-white p-3 rounded-2xl rounded-tr-none shadow-sm max-w-lg">
+                                Hola, puse como objetivo general de mi tesis: "Conocer si las enfermeras se lavan las manos en la UCI para concientizar al servicio". ¿Está bien planteado?
+                            </div>
+                        </div>
+
+                        <div class="flex gap-2.5 items-start max-w-2xl">
+                            <span class="w-7 h-7 rounded-full bg-pink-600 text-white flex items-center justify-center shrink-0">🤖</span>
+                            <div class="bg-white p-4 rounded-2xl rounded-tl-none shadow-sm border border-pink-200 text-slate-700 space-y-1.5">
+                                <p><strong>1️⃣ Análisis:</strong> El enunciado aborda un tema relevante de seguridad del paciente, pero combina un propósito de investigación con una intervención educativa.</p>
+                                <p><strong>2️⃣ Observaciones:</strong> El verbo <em>"Conocer"</em> es ambiguo y difícil de medir estadísticamente. Además, <em>"para concientizar al servicio"</em> es una finalidad práctica, no un objetivo metodológico, y faltan delimitar las variables, población, lugar y período.</p>
+                                <p><strong>3️⃣ Sugerencias de mejora:</strong> Utilizar un verbo medible (ej. <em>Determinar</em>, <em>Analizar</em> o <em>Describir</em>), especificar qué se medirá (adherencia a los 5 momentos de la OMS) y delimitar unidad, institución y año.</p>
+                                <p class="bg-emerald-50 p-2 rounded-lg border border-emerald-200 text-emerald-950"><strong>4️⃣ Ejemplo corregido:</strong> <em>"Determinar el grado de adherencia a los cinco momentos para la higiene de manos en el personal de enfermería de la Unidad de Cuidados Intensivos del Hospital X durante el segundo semestre de 2026."</em></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-center">
+                    <button onclick="abrirSimuladorBots('asistente')" class="no-print px-6 py-3 rounded-full pink-pill font-extrabold text-sm shadow-lg cursor-pointer">
+                        🖱️ ¡Hacé clic acá para probar este Asistente de Investigación en vivo!
+                    </button>
+                </div>
+            </div>
+
+            <div class="border-t-2 border-pink-200 pt-4 flex justify-between items-center z-10">
+                <span class="text-xs font-bold text-slate-600">www.vanesaferreyra.com.ar</span>
+                <div class="flex items-center gap-4">
+                    <span class="font-signature text-2xl text-[#e6007e]">Profe Vane ♥</span>
+                    <span class="pink-pill w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm">8</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             PÁGINA 9: 2. AGENTES ESPECIALIZADOS
+             ========================================== -->
+        <section id="pag-9" class="ebook-page p-8 sm:p-12">
+            <div class="z-10 my-auto space-y-6">
+                <div class="flex items-center gap-3">
+                    <span class="w-12 h-12 rounded-2xl pink-pill flex items-center justify-center font-black text-2xl">2</span>
+                    <div>
+                        <span class="text-xs font-extrabold uppercase tracking-wider text-[#e6007e]">Recurso Conversacional #2</span>
+                        <h2 class="text-3xl font-black text-slate-900">Agentes Especializados</h2>
+                    </div>
+                </div>
+
+                <p class="text-base text-slate-700 bg-white p-5 rounded-2xl border border-pink-100 shadow-sm">
+                    Un <strong>Agente Especializado</strong> tiene un objetivo principal definido, acceso a los archivos de tu asignatura y reglas estrictas sobre cómo usar las herramientas. Por ejemplo, podés configurarlo usando la función <strong>Proyectos de ChatGPT</strong> (o Gems de Gemini) para que trabaje como tu <strong>Ayudante de Cátedra</strong>.
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="bg-white p-4 rounded-2xl border border-pink-100 shadow-sm">
+                        <span class="text-2xl">📁</span>
+                        <h3 class="font-extrabold text-sm text-slate-900 mt-2">1. Creás un "Proyecto"</h3>
+                        <p class="text-xs text-slate-600 mt-1">En ChatGPT abrís la sección <strong>Proyectos</strong>, le ponés el nombre de tu asignatura y cargás los PDFs de la bibliografía oficial.</p>
+                    </div>
+                    <div class="bg-white p-4 rounded-2xl border border-pink-100 shadow-sm">
+                        <span class="text-2xl">⚙️</span>
+                        <h3 class="font-extrabold text-sm text-slate-900 mt-2">2. Configurás las Instrucciones</h3>
+                        <p class="text-xs text-slate-600 mt-1">Pegás la plantilla de instrucciones de tu <strong>Ayudante de Cátedra</strong> para que nunca invente citas ni páginas que no pudo leer.</p>
+                    </div>
+                    <div class="bg-white p-4 rounded-2xl border border-pink-100 shadow-sm">
+                        <span class="text-2xl">🎯</span>
+                        <h3 class="font-extrabold text-sm text-slate-900 mt-2">3. Solicitás Propuestas</h3>
+                        <p class="text-xs text-slate-600 mt-1">Le pedís casos prácticos, preguntas guía o ejercicios fundamentados en los textos reales de tu cátedra.</p>
+                    </div>
+                </div>
+
+                <div class="bg-pink-50 border border-pink-200 p-4 rounded-2xl text-xs text-pink-950 font-medium">
+                    <strong>🔍 Clave metodológica:</strong> Diferenciar una referencia mencionada de un texto cuyo contenido el agente efectivamente puede consultar: <em>conocer el título no significa disponer de la obra</em>.
+                </div>
+            </div>
+
+            <div class="border-t-2 border-pink-200 pt-4 flex justify-between items-center z-10">
+                <span class="text-xs font-bold text-slate-600">www.vanesaferreyra.com.ar</span>
+                <div class="flex items-center gap-4">
+                    <span class="font-signature text-2xl text-[#e6007e]">Profe Vane ♥</span>
+                    <span class="pink-pill w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm">9</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             PÁGINA 10: PROMPT PLANTILLA EDITABLE AGENTE ESPECIALIZADO (PARTE 1)
+             ========================================== -->
+        <section id="pag-10" class="ebook-page p-8 sm:p-12">
+            <div class="z-10 my-auto space-y-4">
+                <div class="flex flex-wrap justify-between items-center gap-2">
+                    <div>
+                        <span class="text-xs font-extrabold uppercase text-[#e6007e]">Plantilla Editable • Función "Proyectos" de ChatGPT</span>
+                        <h2 class="text-2xl font-black text-slate-900">Prompt Adaptable: Agente "Ayudante de Cátedra" (Parte 1)</h2>
+                    </div>
+                    <div class="no-print flex items-center gap-2">
+                        <span class="text-[10px] bg-amber-100 text-amber-900 font-bold px-2.5 py-1 rounded-lg border border-amber-300">✏️ Podés editar los campos resaltados</span>
+                        <button onclick="copiarPromptCompletoAgente()" class="px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs cursor-pointer">
+                            📋 Copiar Prompt Completo
+                        </button>
+                    </div>
+                </div>
+
+                <div id="prompt-agente-parte1" class="prompt-box p-5 rounded-2xl font-mono-code text-[11px] leading-relaxed text-slate-800 space-y-2.5">
+                    <p>Actuá como <strong>mi ayudante de cátedra</strong>, especializado en diseño de actividades para educación superior. Tu <strong>único objetivo principal</strong> es proponer actividades de aprendizaje fundamentadas en la bibliografía de mi asignatura, de acuerdo con mis instrucciones y la configuración que establezca.</p>
+
+                    <p class="font-bold text-[#e6007e] pt-1">Configuración de la asignatura</p>
+                    <ul class="space-y-1.5 pl-2">
+                        <li>- <strong>Nombre de la asignatura:</strong> <span contenteditable="true" class="bg-pink-100/90 text-pink-900 font-bold px-2 py-0.5 rounded border border-pink-300 focus:outline-pink-600 focus:bg-white">[completar]</span>.</li>
+                        <li>- <strong>Nivel educativo y año de cursada:</strong> <span contenteditable="true" class="bg-pink-100/90 text-pink-900 font-bold px-2 py-0.5 rounded border border-pink-300 focus:outline-pink-600 focus:bg-white">[completar]</span>.</li>
+                        <li>- <strong>Bibliografía disponible:</strong> <span contenteditable="true" class="bg-pink-100/90 text-pink-900 font-bold px-2 py-0.5 rounded border border-pink-300 focus:outline-pink-600 focus:bg-white">[adjuntar archivos o indicar títulos, autores y capítulos relevantes]</span>.</li>
+                        <li>- <strong>Herramientas habilitadas, si corresponde:</strong> <span contenteditable="true" class="bg-pink-100/90 text-pink-900 font-bold px-2 py-0.5 rounded border border-pink-300 focus:outline-pink-600 focus:bg-white">[lectura de archivos, búsqueda, generación de documentos u otras]</span>.</li>
+                        <li>- <strong>Tema y orientaciones para la actividad:</strong> <span contenteditable="true" class="bg-pink-100/90 text-pink-900 font-bold px-2 py-0.5 rounded border border-pink-300 focus:outline-pink-600 focus:bg-white">[completar cuando solicite una propuesta]</span>.</li>
+                    </ul>
+
+                    <p class="font-bold text-[#e6007e] pt-1">Fuentes y fundamentación</p>
+                    <p>Basá las propuestas en la bibliografía que cargue o indique. Diferenciá una referencia mencionada de un texto cuyo contenido efectivamente podés consultar: conocer el título no significa disponer de la obra.</p>
+                    <p>Cuando una actividad se apoye en un texto, citá <strong>autor, título y capítulo o página, si esos datos están disponibles</strong>. No inventes referencias, páginas, citas ni atribuyas contenidos a fuentes que no hayas podido consultar. Si falta bibliografía o no podés acceder al contenido necesario, explicá qué falta y solicitá el material antes de formular propuestas que dependan de él.</p>
+                </div>
+            </div>
+
+            <div class="border-t-2 border-pink-200 pt-4 flex justify-between items-center z-10">
+                <span class="text-xs font-bold text-slate-600">www.vanesaferreyra.com.ar</span>
+                <div class="flex items-center gap-4">
+                    <span class="font-signature text-2xl text-[#e6007e]">Profe Vane ♥</span>
+                    <span class="pink-pill w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm">10</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             PÁGINA 11: PROMPT PLANTILLA EDITABLE AGENTE ESPECIALIZADO (PARTE 2)
+             ========================================== -->
+        <section id="pag-11" class="ebook-page p-8 sm:p-12">
+            <div class="z-10 my-auto space-y-4">
+                <div class="flex flex-wrap justify-between items-center gap-2">
+                    <div>
+                        <span class="text-xs font-extrabold uppercase text-[#e6007e]">...continuación de la Plantilla Editable</span>
+                        <h2 class="text-xl font-black text-slate-900">Herramientas, Estructura de Actividades y Límites del Agente</h2>
+                    </div>
+                    <button onclick="copiarPromptCompletoAgente()" class="no-print px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs cursor-pointer">
+                        📋 Copiar Prompt Completo (Partes 1 + 2)
+                    </button>
+                </div>
+
+                <div id="prompt-agente-parte2" class="prompt-box p-5 rounded-2xl font-mono-code text-[11px] leading-relaxed text-slate-800 space-y-2">
+                    <p class="font-bold text-[#e6007e]">Uso de herramientas</p>
+                    <p>Utilizá únicamente las herramientas habilitadas y cuando sean necesarias, sin imponer una secuencia fija:</p>
+                    <ul class="space-y-1 pl-2">
+                        <li>- <strong>Lectura de archivos:</strong> para consultar la bibliografía, identificar contenidos pertinentes y verificar referencias.</li>
+                        <li>- <strong>Búsqueda:</strong> para localizar fuentes que indique o ampliar la bibliografía cuando lo autorice. Diferenciá las fuentes complementarias de la bibliografía de la asignatura.</li>
+                        <li>- <strong>Generación de documentos:</strong> cuando solicite las actividades en un archivo.</li>
+                    </ul>
+                    <p>Si una herramienta no está disponible, indicá la limitación sin simular que la utilizaste.</p>
+
+                    <p class="font-bold text-[#e6007e] pt-1">Propuestas de actividades</p>
+                    <p>Proponé actividades variadas y pertinentes al tema y al nivel educativo: discusiones, casos prácticos, preguntas guía, ejercicios de aplicación o lecturas comentadas. Elegí los tipos que mejor se ajusten a mi pedido, sin incluirlos todos obligatoriamente.</p>
+                    <p>Para cada actividad, presentá:</p>
+                    <ul class="space-y-1 pl-2">
+                        <li>- <strong>Nombre y tipo de actividad.</strong></li>
+                        <li>- <strong>Objetivo de aprendizaje:</strong> qué se espera que el estudiantado pueda hacer.</li>
+                        <li>- <strong>Consigna:</strong> instrucciones claras y utilizables.</li>
+                        <li>- <strong>Fundamento bibliográfico:</strong> una explicación breve de cómo se vincula con el texto de referencia y su cita correspondiente.</li>
+                    </ul>
+                    <p>Diferenciá los ejemplos o casos que elabores de los que provengan de la bibliografía. No presentes una creación propia como parte de una fuente.</p>
+
+                    <p class="font-bold text-[#e6007e] pt-1">Límites y estilo</p>
+                    <p>Tu función es proponer; la selección, adaptación y decisión pedagógica final me corresponden como docente.</p>
+                    <p>Antes de proponer actividades, verificá que estén definidos <strong>asignatura, nivel educativo y bibliografía</strong>. Si falta alguno, pedí únicamente los datos faltantes. Aprovechá la información ya proporcionada y no vuelvas a solicitarla.</p>
+                    <p>Usá un español de Argentina claro, preciso y cercano al lenguaje académico, sin infantilizar ni emplear tecnicismos innecesarios. Ajustá la profundidad y el vocabulario al contexto de la asignatura.</p>
+                </div>
+            </div>
+
+            <div class="border-t-2 border-pink-200 pt-4 flex justify-between items-center z-10">
+                <span class="text-xs font-bold text-slate-600">www.vanesaferreyra.com.ar</span>
+                <div class="flex items-center gap-4">
+                    <span class="font-signature text-2xl text-[#e6007e]">Profe Vane ♥</span>
+                    <span class="pink-pill w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm">11</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             PÁGINA 12: CÓMO USARLO EN PROYECTOS DE CHATGPT (PASO A PASO)
+             ========================================== -->
+        <section id="pag-12" class="ebook-page p-8 sm:p-12">
+            <div class="z-10 my-auto space-y-5">
+                <span class="text-xs font-extrabold uppercase text-[#e6007e]">Paso a paso práctico</span>
+                <h2 class="text-2xl sm:text-3xl font-black text-slate-900">¿Cómo configuré este Agente en "Proyectos" de ChatGPT?</h2>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                    <div class="bg-white p-5 rounded-2xl border border-pink-200 shadow-sm space-y-2">
+                        <span class="pink-pill px-2.5 py-1 rounded-lg font-black">1. Instrucciones del Proyecto</span>
+                        <p class="text-slate-700 leading-relaxed mt-1">
+                            En el panel izquierdo de ChatGPT seleccionás <strong>"Nuevo proyecto"</strong>. En la sección <em>"Agregar instrucciones"</em> pegás la plantilla de las páginas 10 y 11 con los datos de tu materia.
+                        </p>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-2xl border border-pink-200 shadow-sm space-y-2">
+                        <span class="pink-pill px-2.5 py-1 rounded-lg font-black">2. Archivos del Proyecto</span>
+                        <p class="text-slate-700 leading-relaxed mt-1">
+                            Subís los PDFs, guías o capítulos de tu cátedra en <em>"Agregar archivos"</em>. El agente consultará esos documentos en cada nuevo chat que abras dentro del proyecto.
+                        </p>
+                    </div>
+
+                    <div class="bg-emerald-50 border border-emerald-200 p-5 rounded-2xl sm:col-span-2 space-y-2">
+                        <h4 class="font-extrabold text-emerald-900 text-sm">💡 ¿Por qué funciona tan bien esta estructura de Prompt?</h4>
+                        <ul class="space-y-1.5 text-emerald-950 list-disc pl-4">
+                            <li><strong>Evita falsas citas:</strong> Le aclara explícitamente que <em>"conocer el título no significa disponer de la obra"</em> y le exige avisar si falta un texto.</li>
+                            <li><strong>Separa ficción de fuente:</strong> Distingue los casos prácticos creados por la IA de los datos textuales de la bibliografía.</li>
+                            <li><strong>Respeta la autoridad docente:</strong> Reconoce que su rol es proponer y que la decisión pedagógica final es siempre tuya.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="flex justify-center pt-1">
+                    <button onclick="abrirSimuladorBots('agente')" class="no-print px-6 py-3 rounded-full pink-pill font-extrabold text-sm shadow-lg cursor-pointer">
+                        ⚙️ Probar Demostración del Agente Ayudante de Cátedra
+                    </button>
+                </div>
+            </div>
+
+            <div class="border-t-2 border-pink-200 pt-4 flex justify-between items-center z-10">
+                <span class="text-xs font-bold text-slate-600">www.vanesaferreyra.com.ar</span>
+                <div class="flex items-center gap-4">
+                    <span class="font-signature text-2xl text-[#e6007e]">Profe Vane ♥</span>
+                    <span class="pink-pill w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm">12</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             PÁGINA 13: 3. CHATBOTS PARA REPASO
+             ========================================== -->
+        <section id="pag-13" class="ebook-page p-8 sm:p-12">
+            <div class="z-10 my-auto space-y-6">
+                <div class="flex items-center gap-3">
+                    <span class="w-12 h-12 rounded-2xl pink-pill flex items-center justify-center font-black text-2xl">3</span>
+                    <div>
+                        <span class="text-xs font-extrabold uppercase tracking-wider text-[#e6007e]">Recurso Conversacional #3</span>
+                        <h2 class="text-3xl font-black text-slate-900">Chatbots para Repaso</h2>
+                    </div>
+                </div>
+
+                <p class="text-base text-slate-700 bg-white p-5 rounded-2xl border border-pink-100 shadow-sm">
+                    Un <strong>Chatbot para Repaso</strong> invierte los roles tradicionales: en lugar de esperar que el alumno pregunte, <strong>el bot inicia la conversación planteando situaciones breves</strong>, repregunta según la respuesta del estudiante y ofrece andamiaje progresivo (pistas) cuando detecta una confusión.
+                </p>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
+                    <div class="bg-white p-5 rounded-2xl border border-pink-100">
+                        <span class="font-black text-[#e6007e] text-base">1. Diagnóstico Inicial</span>
+                        <p class="text-slate-600 mt-2">El bot pregunta qué tema de la unidad quiere repasar el estudiante (ej. Oxigenoterapia, Farmacología, Bioseguridad).</p>
+                    </div>
+                    <div class="bg-white p-5 rounded-2xl border border-pink-100">
+                        <span class="font-black text-[#e6007e] text-base">2. Diálogo con Pistas</span>
+                        <p class="text-slate-600 mt-2">Si el estudiante se equivoca, el bot no le da la solución de inmediato: le ofrece una pista conceptual para que piense de nuevo.</p>
+                    </div>
+                    <div class="bg-white p-5 rounded-2xl border border-pink-100">
+                        <span class="font-black text-[#e6007e] text-base">3. Cierre Formativo</span>
+                        <p class="text-slate-600 mt-2">Al terminar la ronda de diálogo, el bot resume qué conceptos quedaron firmes y qué páginas de la bibliografía conviene releer.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-t-2 border-pink-200 pt-4 flex justify-between items-center z-10">
+                <span class="text-xs font-bold text-slate-600">www.vanesaferreyra.com.ar</span>
+                <div class="flex items-center gap-4">
+                    <span class="font-signature text-2xl text-[#e6007e]">Profe Vane ♥</span>
+                    <span class="pink-pill w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm">13</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             PÁGINA 14: PROMPT ADAPTABLE CHATBOT PARA REPASO
+             ========================================== -->
+        <section id="pag-14" class="ebook-page p-8 sm:p-12">
+            <div class="z-10 my-auto space-y-4">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <span class="text-xs font-extrabold uppercase text-[#e6007e]">Copiá y adaptá</span>
+                        <h2 class="text-2xl font-black text-slate-900">Prompt Adaptable: Chatbot para Repaso</h2>
+                    </div>
+                    <button onclick="copiarPrompt('prompt-repaso')" class="no-print px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs cursor-pointer">
+                        📋 Copiar Prompt
+                    </button>
+                </div>
+
+                <div id="prompt-repaso" class="prompt-box p-5 rounded-2xl font-mono-code text-[11px] leading-relaxed text-slate-800 space-y-2">
+                    <p class="font-bold text-[#e6007e]">ACTUÁ COMO ESPECIALISTA EN DISEÑO EDUCATIVO EN ENFERMERÍA Y DESARROLLO DE CHATBOTS INTERACTIVOS.</p>
+                    <p>QUIERO CREAR UN CHATBOT PARA REPASO ESTUDIANTIL CON ESTOS DATOS:<br>
+                    • TÍTULO: [Completar].<br>
+                    • TEMA Y UNIDAD: [Ej: Oxigenoterapia y valoración respiratoria / Administración segura de medicamentos].<br>
+                    • DESTINATARIOS: [Completar].<br>
+                    • OBJETIVO DE APRENDIZAJE: [Completar].<br>
+                    • CANTIDAD DE INTERCAMBIOS / ESTACIONES DE DIÁLOGO: [Ej: 6 rondas].<br>
+                    • BIBLIOGRAFÍA AUTORIZADA: [Adjuntar documentos].</p>
+
+                    <p><strong>ETAPA 1. GUIÓN CONVERSACIONAL Y VALIDACIÓN DOCENTE</strong><br>
+                    Utilizando EXCLUSIVAMENTE la bibliografía adjunta, diseñá una tabla de diálogo donde cada ronda incluya:<br>
+                    1. Pregunta o micro-situación que plantea el Chatbot.<br>
+                    2. Posibles respuestas o caminos que elige el estudiante.<br>
+                    3. Pista intermedia (si el estudiante duda o elige una opción incompleta, para darle oportunidad de repensar).<br>
+                    4. Retroalimentación final fundamentada.<br>
+                    5. Cita exacta del documento (título y página/sección).<br>
+                    <strong>DETENETE Y ESPERÁ MI APROBACIÓN ANTES DE PROGRAMAR.</strong></p>
+
+                    <p><strong>ETAPA 2. CONSTRUCCIÓN DEL CHATBOT EN UN ARCHIVO INDEX.HTML</strong><br>
+                    Tras mi aprobación, generá un único archivo <strong>index.html</strong> (HTML, CSS y JS integrados, sin conexión a internet ni librerías externas) con interfaz de mensajería interactiva, burbujas de diálogo animadas, botón de "Pedir pista al bot", resumen final de temas a repasar y botón de "Bibliografía y Fundamentos".</p>
+                </div>
+            </div>
+
+            <div class="border-t-2 border-pink-200 pt-4 flex justify-between items-center z-10">
+                <span class="text-xs font-bold text-slate-600">www.vanesaferreyra.com.ar</span>
+                <div class="flex items-center gap-4">
+                    <span class="font-signature text-2xl text-[#e6007e]">Profe Vane ♥</span>
+                    <span class="pink-pill w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm">14</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             PÁGINA 15: FLUJO CONVERSACIONAL CON REPREGUNTA
+             ========================================== -->
+        <section id="pag-15" class="ebook-page p-8 sm:p-12">
+            <div class="z-10 my-auto space-y-5">
+                <span class="text-xs font-extrabold uppercase text-[#e6007e]">Diseño del Diálogo</span>
+                <h2 class="text-2xl font-black text-slate-900">¿Cómo funciona la repregunta pedagógica en el Chatbot?</h2>
+
+                <div class="space-y-3 text-xs">
+                    <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+                        <span class="font-extrabold text-[#e6007e]">🤖 Chatbot:</span> "Recibís a un paciente con EPOC reagudizado, SatO₂ de 88% y orden de oxigenoterapia controlada. ¿Qué dispositivo tiene prioridad para asegurar una FiO₂ exacta e independiente del patrón respiratorio?"
+                    </div>
+                    <div class="bg-slate-200 p-3.5 rounded-2xl ml-8 text-slate-800">
+                        <span class="font-bold">👩‍🎓 Estudiante:</span> "Le coloco una máscara simple a 4 litros por minuto."
+                    </div>
+                    <div class="bg-amber-50 p-4 rounded-2xl border border-amber-300 text-amber-950">
+                        <span class="font-extrabold">💡 Pista de Repregunta del Bot (en vez de marcar solo "Incorrecto"):</span><br>
+                        "¡Cuidado con dos detalles! Primero: la máscara simple es de <em>bajo flujo</em> (su FiO₂ varía si el paciente respira más rápido o más lento). Segundo: ¿recordás qué ocurre con el CO₂ exhalado dentro de una máscara simple si el flujo es menor a 5 L/min? ¡Probá de nuevo!"
+                    </div>
+                    <div class="bg-emerald-50 p-4 rounded-2xl border border-emerald-300 text-emerald-950">
+                        <span class="font-extrabold">✅ Segundo Intento del Estudiante:</span> "¡Tenés razón! Con menos de 5 L/min hay reinhalación de CO₂. Para una FiO₂ fija necesito un sistema de alto flujo como la <strong>Máscara tipo Venturi</strong>."
+                    </div>
+                </div>
+
+                <div class="flex justify-center pt-2">
+                    <button onclick="abrirSimuladorBots('repaso')" class="no-print px-6 py-3 rounded-full pink-pill font-extrabold text-sm shadow-lg cursor-pointer">
+                        💬 Probar Chatbot de Repaso en Vivo
+                    </button>
+                </div>
+            </div>
+
+            <div class="border-t-2 border-pink-200 pt-4 flex justify-between items-center z-10">
+                <span class="text-xs font-bold text-slate-600">www.vanesaferreyra.com.ar</span>
+                <div class="flex items-center gap-4">
+                    <span class="font-signature text-2xl text-[#e6007e]">Profe Vane ♥</span>
+                    <span class="pink-pill w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm">15</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             PÁGINA 16: 4. TUTORES INTELIGENTES Y BOTS PARA CASOS
+             ========================================== -->
+        <section id="pag-16" class="ebook-page p-8 sm:p-12">
+            <div class="z-10 my-auto space-y-6">
+                <div class="flex items-center gap-3">
+                    <span class="w-12 h-12 rounded-2xl pink-pill flex items-center justify-center font-black text-2xl">4</span>
+                    <div>
+                        <span class="text-xs font-extrabold uppercase tracking-wider text-[#e6007e]">Recurso Conversacional #4</span>
+                        <h2 class="text-3xl font-black text-slate-900">Tutores Inteligentes y Bots para Casos</h2>
+                    </div>
+                </div>
+
+                <p class="text-base text-slate-700 bg-white p-5 rounded-2xl border border-pink-100 shadow-sm">
+                    Es el nivel más rico de simulación conversacional. Aquí podemos diseñar <strong>dos dinámicas complementarias</strong> para entrenar el juicio clínico en un entorno psicológicamente seguro:
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <div class="bg-white p-5 rounded-2xl border-2 border-pink-200 shadow-sm space-y-2">
+                        <span class="pink-pill px-3 py-1 rounded-full text-[11px] font-bold">Modalidad A</span>
+                        <h3 class="font-black text-lg text-slate-900">Bot de Paciente Simulado</h3>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            El bot asume la voz de un paciente (o familiar) en una entrevista de valoración. No entrega todos los datos juntos: el estudiante debe realizar las preguntas pertinentes (anamnesis), decidir qué signos vitales controlar y priorizar cuidados.
+                        </p>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-2xl border-2 border-purple-200 shadow-sm space-y-2">
+                        <span class="bg-purple-600 text-white px-3 py-1 rounded-full text-[11px] font-bold">Modalidad B</span>
+                        <h3 class="font-black text-lg text-slate-900">Tutor Clínico Socrático</h3>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Presenta un caso evolutivo por etapas (Valoración ➔ Diagnóstico ➔ Planificación ➔ Evaluación). Ante cada decisión del alumno, el tutor pregunta <em>"¿Qué dato del monitor te llevó a priorizar esa acción?"</em> y cierra con un <strong>debriefing formativo</strong>.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-t-2 border-pink-200 pt-4 flex justify-between items-center z-10">
+                <span class="text-xs font-bold text-slate-600">www.vanesaferreyra.com.ar</span>
+                <div class="flex items-center gap-4">
+                    <span class="font-signature text-2xl text-[#e6007e]">Profe Vane ♥</span>
+                    <span class="pink-pill w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm">16</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             PÁGINA 17: PROMPT ADAPTABLE TUTOR INTELIGENTE Y BOT DE CASOS (FASE 1)
+             ========================================== -->
+        <section id="pag-17" class="ebook-page p-8 sm:p-12">
+            <div class="z-10 my-auto space-y-4">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <span class="text-xs font-extrabold uppercase text-[#e6007e]">Copiá y adaptá</span>
+                        <h2 class="text-2xl font-black text-slate-900">Prompt Adaptable: Tutor y Bot para Casos Clínicos</h2>
+                    </div>
+                    <button onclick="copiarPrompt('prompt-tutor-1')" class="no-print px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs cursor-pointer">
+                        📋 Copiar Fase 1
+                    </button>
+                </div>
+
+                <div id="prompt-tutor-1" class="prompt-box p-5 rounded-2xl font-mono-code text-[11px] leading-relaxed text-slate-800 space-y-2">
+                    <p class="font-bold text-[#e6007e]">ACTUÁ COMO UN EQUIPO DE SIMULACIÓN CLÍNICA EN ENFERMERÍA Y DESARROLLO DE TUTORES INTELIGENTES.</p>
+                    <p>NECESITO CREAR UN BOT CONVERSACIONAL PARA UN CASO CLÍNICO SIMULADO:<br>
+                    • TÍTULO DEL CASO: [Ej: Toma de decisiones en dificultad respiratoria aguda].<br>
+                    • DESTINATARIOS: [Carrera, año y saberes previos].<br>
+                    • MODALIDAD: [Paciente Simulado para valoración / Tutor Socrático de razonamiento clínico / Combinado].<br>
+                    • OBJETIVOS DE APRENDIZAJE: [Completar].<br>
+                    • BIBLIOGRAFÍA Y PROTOCOLOS AUTORIZADOS: [Adjuntar documentos].<br>
+                    • IMAGEN DEL PACIENTE / ESCENARIO (Opcional): [Adjuntar imagen].</p>
+
+                    <p><strong>FASE 1. DISEÑO CLÍNICO-PEDAGÓGICO Y REVISIÓN DOCENTE</strong><br>
+                    1. Identificá los documentos adjuntos que pudiste leer. Usá exclusivamente esas fuentes para valores clínicos, escalas, intervenciones y fundamentos.<br>
+                    2. Diseñá la ficha del caso ficticio (situación inicial, signos vitales, datos que el paciente solo revela si el estudiante los pregunta y evolución según las decisiones).<br>
+                    3. Elaborá una matriz de 4 a 5 momentos de decisión con:<br>
+                    - Etapa del proceso de atención.<br>
+                    - Intervención del Paciente / Pregunta del Tutor.<br>
+                    - Opciones de decisión o preguntas que realiza el estudiante.<br>
+                    - Pista socrática (si hay omisión o error).<br>
+                    - Devolución clínica fundamentada y cita exacta (documento y página).<br>
+                    4. Incluí 3 preguntas finales de Debriefing / Reflexión metacognitiva.<br>
+                    <strong>DETENETE Y ESPERÁ MI APROBACIÓN DE LA MATRIZ ANTES DE GENERAR EL CÓDIGO.</strong></p>
+                </div>
+            </div>
+
+            <div class="border-t-2 border-pink-200 pt-4 flex justify-between items-center z-10">
+                <span class="text-xs font-bold text-slate-600">www.vanesaferreyra.com.ar</span>
+                <div class="flex items-center gap-4">
+                    <span class="font-signature text-2xl text-[#e6007e]">Profe Vane ♥</span>
+                    <span class="pink-pill w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm">17</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             PÁGINA 18: PROMPT ADAPTABLE TUTOR INTELIGENTE (FASE 2 - CONSTRUCCIÓN)
+             ========================================== -->
+        <section id="pag-18" class="ebook-page p-8 sm:p-12">
+            <div class="z-10 my-auto space-y-4">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-xl font-black text-slate-900">...continuación del Prompt (Fase 2: Construcción del Bot de Casos)</h2>
+                    <button onclick="copiarPrompt('prompt-tutor-2')" class="no-print px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs cursor-pointer">
+                        📋 Copiar Fase 2
+                    </button>
+                </div>
+
+                <div id="prompt-tutor-2" class="prompt-box p-5 rounded-2xl font-mono-code text-[11px] leading-relaxed text-slate-800 space-y-2">
+                    <p><strong>FASE 2. CONSTRUCCIÓN DEL SIMULADOR CONVERSACIONAL (ARCHIVO INDEX.HTML)</strong><br>
+                    Cuando apruebe la matriz clínica, construí un único archivo <strong>index.html</strong> autocontenido (HTML, CSS y JS integrados) que funcione sin conexión a internet:</p>
+                    <p>• <strong>Panel Clínico:</strong> Mostrá los datos visibles del paciente, monitor de signos vitales que se actualice según la evolución y pestaña de historia clínica.<br>
+                    • <strong>Ventana de Diálogo Dual:</strong> Permití que el estudiante dialogue con el Paciente Simulado (para valorar) y reciba orientación del Tutor Clínico (con botón de "Pedir pista socrática").<br>
+                    • <strong>Seguridad Clínica y Pedagógica:</strong> Si una decisión pone en riesgo al paciente simulado, el Tutor debe intervenir explicando la fisiopatología o norma de bioseguridad y permitir reintentar razonando.<br>
+                    • <strong>Cierre de Debriefing:</strong> Al finalizar el caso, mostrá un resumen del recorrido, fortalezas, aspectos a repasar, las preguntas de reflexión y el acceso directo a "Bibliografía y Fundamentos".<br>
+                    • <strong>Ciberseguridad y Accesibilidad:</strong> Sin dependencias externas, sin claves de API, sin pedir datos personales, navegable con teclado y adaptable a celular.</p>
+                </div>
+
+                <div class="flex justify-center pt-2">
+                    <button onclick="abrirSimuladorBots('tutor')" class="no-print px-6 py-3 rounded-full pink-pill font-extrabold text-sm shadow-lg cursor-pointer">
+                        🩺 Probar el Tutor de Casos Clínicos en Vivo
+                    </button>
+                </div>
+            </div>
+
+            <div class="border-t-2 border-pink-200 pt-4 flex justify-between items-center z-10">
+                <span class="text-xs font-bold text-slate-600">www.vanesaferreyra.com.ar</span>
+                <div class="flex items-center gap-4">
+                    <span class="font-signature text-2xl text-[#e6007e]">Profe Vane ♥</span>
+                    <span class="pink-pill w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm">18</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             PÁGINA 19: ¿DÓNDE CREARLOS? (GEMINI GEMS, CANVAS, GPTS)
+             ========================================== -->
+        <section id="pag-19" class="ebook-page p-8 sm:p-12">
+            <div class="z-10 my-auto space-y-6">
+                <span class="text-xs font-extrabold uppercase text-[#e6007e]">Herramientas Prácticas</span>
+                <h2 class="text-3xl font-black text-slate-900">¿Dónde construimos y compartimos nuestros Bots?</h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5 text-xs">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-pink-200 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="pink-pill px-3 py-1 rounded-full font-extrabold">Opción 1 • Recomendada Offline</span>
+                            <span class="font-bold text-slate-400">HTML Descargable</span>
+                        </div>
+                        <h3 class="font-black text-lg text-slate-900">Gemini Canvas / ChatGPT Canvas</h3>
+                        <p class="text-slate-600 leading-relaxed">
+                            Activás la herramienta <strong>Canvas</strong>, adjuntás tu bibliografía y pegás el prompt de este Ebook. Descargás un único archivo <code>index.html</code> que funciona como un simulador conversacional cerrado.
+                        </p>
+                        <ul class="list-disc pl-4 space-y-1 text-slate-700 font-semibold">
+                            <li>0% riesgo de alucinación (usa solo tu árbol validado).</li>
+                            <li>No pide cuenta ni registro a los estudiantes.</li>
+                            <li>Se sube directo al Campus Moodle o GitHub Pages.</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-purple-200 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="bg-purple-600 text-white px-3 py-1 rounded-full font-extrabold">Opción 2 • Conversación Abierta</span>
+                            <span class="font-bold text-slate-400">En la Nube</span>
+                        </div>
+                        <h3 class="font-black text-lg text-slate-900">Gems de Gemini / GPTs Personalizados</h3>
+                        <p class="text-slate-600 leading-relaxed">
+                            Creás un asistente personalizado cargando las instrucciones de la Fase 1 y subiendo tus PDFs a su "Base de conocimientos".
+                        </p>
+                        <ul class="list-disc pl-4 space-y-1 text-slate-700 font-semibold">
+                            <li>Permite diálogo libre con voz o texto.</li>
+                            <li>Requiere que el estudiante tenga conexión a internet y cuenta en la plataforma.</li>
+                            <li>Siempre debés probarlo antes para verificar que respete los límites.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-t-2 border-pink-200 pt-4 flex justify-between items-center z-10">
+                <span class="text-xs font-bold text-slate-600">www.vanesaferreyra.com.ar</span>
+                <div class="flex items-center gap-4">
+                    <span class="font-signature text-2xl text-[#e6007e]">Profe Vane ♥</span>
+                    <span class="pink-pill w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm">19</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             PÁGINA 20: CIBERSEGURIDAD, PRIVACIDAD Y ÉTICA EN BOTS DE SALUD
+             ========================================== -->
+        <section id="pag-20" class="ebook-page p-8 sm:p-12">
+            <div class="z-10 my-auto space-y-5">
+                <div class="inline-flex items-center gap-2 bg-pink-100 text-[#e6007e] px-4 py-1.5 rounded-full text-xs font-black">
+                    🔒 ¡La seguridad primero!
+                </div>
+                <h2 class="text-3xl font-black text-slate-900">
+                    Ciberseguridad, Privacidad y Ética en Recursos Conversacionales
+                </h2>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                    <div class="bg-white p-5 rounded-2xl border border-pink-200 shadow-sm space-y-2">
+                        <h3 class="font-extrabold text-sm text-[#e6007e]">1. Protección de Datos de Pacientes</h3>
+                        <p class="text-slate-700 leading-relaxed">
+                            <strong>Jamás cargues historias clínicas reales</strong>, nombres, DNI, números de cama ni fotos identificables de pacientes al entrenar un bot o durante las prácticas de los estudiantes. Todos los casos deben ser 100% sintéticos o anonimizados.
+                        </p>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-2xl border border-pink-200 shadow-sm space-y-2">
+                        <h3 class="font-extrabold text-sm text-[#e6007e]">2. Aviso de Uso Exclusivamente Educativo</h3>
+                        <p class="text-slate-700 leading-relaxed">
+                            Todo chatbot o tutor debe mostrar un aviso visible: <em>"Recurso de práctica formativa basado en bibliografía seleccionada. No reemplaza el juicio clínico profesional ni los protocolos institucionales vigentes."</em>
+                        </p>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-2xl border border-pink-200 shadow-sm space-y-2">
+                        <h3 class="font-extrabold text-sm text-[#e6007e]">3. Sin Claves API Expuestas en HTML</h3>
+                        <p class="text-slate-700 leading-relaxed">
+                            Si generás un archivo descargable <code>index.html</code>, nunca pegues tu clave secreta de API dentro del código JavaScript, ya que cualquiera podría verla al inspeccionar la página.
+                        </p>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-2xl border border-pink-200 shadow-sm space-y-2">
+                        <h3 class="font-extrabold text-sm text-[#e6007e]">4. Prevención de Inyección de Código</h3>
+                        <p class="text-slate-700 leading-relaxed">
+                            En bots programados en HTML/JS, las respuestas que escribe el estudiante deben procesarse como texto plano (<code>textContent</code>) y nunca ejecutarse como código (evitar <code>eval()</code> o <code>innerHTML</code> directo).
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-t-2 border-pink-200 pt-4 flex justify-between items-center z-10">
+                <span class="text-xs font-bold text-slate-600">www.vanesaferreyra.com.ar</span>
+                <div class="flex items-center gap-4">
+                    <span class="font-signature text-2xl text-[#e6007e]">Profe Vane ♥</span>
+                    <span class="pink-pill w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm">20</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             PÁGINA 21: NO TE OLVIDES DEL LOOP (REVISIÓN HUMANA)
+             ========================================== -->
+        <section id="pag-21" class="ebook-page p-8 sm:p-12">
+            <div class="z-10 my-auto space-y-6">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <span class="text-xs font-extrabold uppercase text-[#e6007e]">El corazón de nuestra metodología</span>
+                        <h2 class="text-3xl font-black text-slate-900">¡No te olvides del Loop! (Human in the Loop)</h2>
+                    </div>
+                    <span class="pink-pill px-5 py-2 rounded-2xl font-black text-sm shadow-md shrink-0">
+                        👩‍🏫 Revisión Docente Indispensable
+                    </span>
+                </div>
+
+                <p class="text-sm sm:text-base text-slate-700 bg-white p-6 rounded-2xl border border-pink-100 leading-relaxed">
+                    En educación en salud, un error en una dosis, en una escala de valoración o en la secuencia de colocación de EPP tiene impacto directo en la seguridad del paciente. Por eso <strong>nunca le pedimos a la IA que programe el bot en un solo paso</strong>.
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                    <div class="bg-white p-5 rounded-2xl border-l-4 border-pink-500 shadow-sm">
+                        <span class="font-black text-pink-600 uppercase">1. Antes (Curaduría)</span>
+                        <p class="text-slate-700 mt-1">Elegimos protocolos vigentes y definimos qué competencia queremos desarrollar en nuestros estudiantes.</p>
+                    </div>
+                    <div class="bg-white p-5 rounded-2xl border-l-4 border-pink-500 shadow-sm">
+                        <span class="font-black text-pink-600 uppercase">2. Durante (Fase 1)</span>
+                        <p class="text-slate-700 mt-1">Auditamos la tabla de preguntas, pistas, respuestas esperadas y citas bibliográficas antes de autorizar el código.</p>
+                    </div>
+                    <div class="bg-white p-5 rounded-2xl border-l-4 border-pink-500 shadow-sm">
+                        <span class="font-black text-pink-600 uppercase">3. Después (Prueba de Estrés)</span>
+                        <p class="text-slate-700 mt-1">Probamos el bot respondiendo a propósito con errores frecuentes para comprobar cómo guía y retroalimenta.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-t-2 border-pink-200 pt-4 flex justify-between items-center z-10">
+                <span class="text-xs font-bold text-slate-600">www.vanesaferreyra.com.ar</span>
+                <div class="flex items-center gap-4">
+                    <span class="font-signature text-2xl text-[#e6007e]">Profe Vane ♥</span>
+                    <span class="pink-pill w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm">21</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             PÁGINA 22: CREAR CON IA, ENSEÑAR CON CRITERIO
+             ========================================== -->
+        <section id="pag-22" class="ebook-page p-8 sm:p-12">
+            <div class="z-10 my-auto space-y-6">
+                <h2 class="text-4xl font-black text-slate-900">
+                    Crear con IA, <span class="text-[#e6007e]">enseñar con criterio</span>
+                </h2>
+
+                <div class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-pink-100 space-y-4 text-sm sm:text-base text-slate-700 leading-relaxed">
+                    <p>
+                        En este <strong>Taller 2</strong> exploramos cómo diseñar <strong>asistentes virtuales educativos, agentes especializados, chatbots para repaso y tutores inteligentes para casos clínicos</strong>.
+                    </p>
+                    <p>
+                        El valor de un recurso conversacional no está en la complejidad tecnológica, sino en la <strong>calidad de las preguntas que formula</strong>, en la calidez con la que acompaña el error y en la rigurosidad científica de sus fundamentos.
+                    </p>
+                    <p class="font-bold text-slate-900">
+                        Cuando un estudiante practica con un tutor bien diseñado, llega al aula y al hospital con más confianza, mayor vocabulario técnico y mejor capacidad de observación clínica.
+                    </p>
+                </div>
+            </div>
+
+            <div class="border-t-2 border-pink-200 pt-4 flex justify-between items-center z-10">
+                <span class="text-xs font-bold text-slate-600">www.vanesaferreyra.com.ar</span>
+                <div class="flex items-center gap-4">
+                    <span class="font-signature text-2xl text-[#e6007e]">Profe Vane ♥</span>
+                    <span class="pink-pill w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm">22</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             PÁGINA 23: ANTES DE PUBLICAR, RECORDÁ (CHECKLIST)
+             ========================================== -->
+        <section id="pag-23" class="ebook-page p-8 sm:p-12">
+            <div class="z-10 my-auto space-y-6">
+                <h2 class="text-3xl sm:text-4xl font-black text-slate-900">
+                    Antes de compartir tu Bot, <span class="text-[#e6007e]">recordá verificar:</span>
+                </h2>
+
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-pink-200 space-y-3 text-xs sm:text-sm">
+                    <label class="flex items-start gap-3 cursor-pointer">
+                        <input type="checkbox" checked class="w-5 h-5 accent-[#e6007e] mt-0.5 rounded">
+                        <span><strong>Adherencia bibliográfica:</strong> Todas las respuestas, pistas y devoluciones citan la fuente oficial de la cátedra.</span>
+                    </label>
+                    <label class="flex items-start gap-3 cursor-pointer">
+                        <input type="checkbox" checked class="w-5 h-5 accent-[#e6007e] mt-0.5 rounded">
+                        <span><strong>Andamiaje pedagógico:</strong> El tutor guía mediante pistas y repreguntas en lugar de entregar la tarea resuelta.</span>
+                    </label>
+                    <label class="flex items-start gap-3 cursor-pointer">
+                        <input type="checkbox" checked class="w-5 h-5 accent-[#e6007e] mt-0.5 rounded">
+                        <span><strong>Privacidad y anonimato:</strong> No se incluyen datos reales de pacientes ni se solicitan datos personales a los estudiantes.</span>
+                    </label>
+                    <label class="flex items-start gap-3 cursor-pointer">
+                        <input type="checkbox" checked class="w-5 h-5 accent-[#e6007e] mt-0.5 rounded">
+                        <span><strong>Funcionamiento técnico:</strong> Si es un archivo HTML, abre con doble clic sin conexión y los botones de reinicio y bibliografía funcionan correctamente.</span>
+                    </label>
+                    <label class="flex items-start gap-3 cursor-pointer">
+                        <input type="checkbox" checked class="w-5 h-5 accent-[#e6007e] mt-0.5 rounded">
+                        <span><strong>Accesibilidad:</strong> Buen contraste visual, texto claro y adaptable tanto a celulares como a computadoras.</span>
+                    </label>
+                </div>
+
+                <div class="pink-pill p-5 rounded-2xl text-center">
+                    <p class="font-extrabold text-sm sm:text-base">
+                        🚀 El desafío ahora es llevarlo a tu práctica: elegí una guía de tu asignatura, diseñá tu primer tutor conversacional y observá cómo enriquece el aprendizaje de tus estudiantes.
+                    </p>
+                </div>
+            </div>
+
+            <div class="border-t-2 border-pink-200 pt-4 flex justify-between items-center z-10">
+                <span class="text-xs font-bold text-slate-600">www.vanesaferreyra.com.ar</span>
+                <div class="flex items-center gap-4">
+                    <span class="font-signature text-2xl text-[#e6007e]">Profe Vane ♥</span>
+                    <span class="pink-pill w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm">23</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             PÁGINA 24: CONTRAPORTADA
+             ========================================== -->
+        <section id="pag-24" class="ebook-page p-8 sm:p-12 text-center">
+            <div class="my-auto flex flex-col items-center justify-center space-y-6 z-10">
+                <div class="inline-flex items-center gap-2 border-2 border-slate-800 rounded-xl px-5 py-2.5 bg-white shadow-sm">
+                    <span class="text-pink-600 text-xl">♡</span>
+                    <div class="text-sm font-extrabold tracking-widest leading-none text-slate-900 text-left">
+                        VANESA<br>FERREYRA<span class="text-[9px] align-top">®</span>
+                    </div>
+                </div>
+
+                <span class="pink-pill px-8 py-2.5 rounded-full font-black text-xl tracking-wide">
+                    Taller 2
+                </span>
+
+                <h2 class="text-3xl sm:text-4xl font-black text-slate-900 max-w-xl leading-tight">
+                    Asistentes virtuales, agentes, chatbots y tutores inteligentes
+                </h2>
+
+                <p class="text-slate-600 font-semibold text-sm max-w-md">
+                    Transformando la educación en salud con tecnología, rigor pedagógico y calidez humana.
+                </p>
+
+                <div class="pt-4">
+                    <span class="font-signature text-4xl text-[#e6007e] block mb-2">Profe Vane ♥</span>
+                    <span class="text-sm font-extrabold text-slate-800 tracking-wider">2026 • www.vanesaferreyra.com.ar</span>
+                </div>
+            </div>
+
+            <div class="border-t-2 border-pink-200 pt-4 flex justify-between items-center z-10">
+                <span class="text-xs font-bold text-slate-600">www.vanesaferreyra.com.ar</span>
+                <span class="pink-pill w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm">24</span>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- =========================================================================
+         MODAL INTERACTIVO: SIMULADOR EN VIVO DE LOS 4 BOTS DEL TALLER 2
+         ========================================================================= -->
+    <div id="modalBots" class="no-print hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6">
+        <div class="bg-white rounded-3xl max-w-3xl w-full shadow-2xl border-2 border-pink-300 overflow-hidden flex flex-col max-h-[90vh]">
+            <!-- Cabecera del Modal -->
+            <div class="pink-pill p-4 sm:px-6 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <span class="text-2xl">🤖</span>
+                    <div>
+                        <h3 class="font-black text-sm sm:text-base">Laboratorio Interactivo • Los 4 Bots del Taller 2</h3>
+                        <p class="text-[11px] opacity-90">Probá en vivo cada recurso conversacional como lo harían tus estudiantes</p>
+                    </div>
+                </div>
+                <button onclick="cerrarSimuladorBots()" class="w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center font-bold text-white cursor-pointer">✕</button>
+            </div>
+
+            <!-- Selector de los 4 Bots -->
+            <div class="bg-pink-50 px-4 py-2.5 border-b border-pink-200 flex flex-wrap gap-2">
+                <button id="tab-asistente" onclick="cambiarBotDemo('asistente')" class="px-3 py-1.5 rounded-xl text-xs font-extrabold transition cursor-pointer">
+                    1️⃣ Asistente Virtual
+                </button>
+                <button id="tab-agente" onclick="cambiarBotDemo('agente')" class="px-3 py-1.5 rounded-xl text-xs font-extrabold transition cursor-pointer">
+                    2️⃣ Agente Auditor SBAR
+                </button>
+                <button id="tab-repaso" onclick="cambiarBotDemo('repaso')" class="px-3 py-1.5 rounded-xl text-xs font-extrabold transition cursor-pointer">
+                    3️⃣ Chatbot de Repaso
+                </button>
+                <button id="tab-tutor" onclick="cambiarBotDemo('tutor')" class="px-3 py-1.5 rounded-xl text-xs font-extrabold transition cursor-pointer">
+                    4️⃣ Tutor de Caso Clínico
+                </button>
+            </div>
+
+            <!-- Área de Conversación -->
+            <div id="chatAreaDemo" class="p-5 overflow-y-auto flex-1 space-y-3 bg-slate-50 text-xs sm:text-sm">
+                <!-- Mensajes dinámicos -->
+            </div>
+
+            <!-- Opciones de Respuesta Interactiva -->
+            <div id="opcionesAreaDemo" class="p-4 bg-white border-t border-slate-200 space-y-2">
+                <!-- Botones dinámicos -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Notificación Toast para Copiado -->
+    <div id="toastCopiado" class="no-print hidden fixed bottom-6 right-6 z-50 pink-pill px-5 py-3 rounded-2xl font-bold text-xs shadow-2xl">
+        ✅ ¡Prompt copiado al portapapeles! Listo para pegar en tu IA.
+    </div>
+
+    <script>
+        function irASeccion(id) {
+            if (!id) return;
+            const el = document.getElementById(id);
+            if (el) el.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function copiarPrompt(idElemento) {
+            const el = document.getElementById(idElemento);
+            if (!el) return;
+            const texto = el.innerText;
+
+            const area = document.createElement('textarea');
+            area.value = texto;
+            document.body.appendChild(area);
+            area.select();
+            document.execCommand('copy');
+            document.body.removeChild(area);
+
+            const toast = document.getElementById('toastCopiado');
+            toast.classList.remove('hidden');
+            setTimeout(() => toast.classList.add('hidden'), 2800);
+        }
+
+        function copiarPromptCompletoAgente() {
+            const p1 = document.getElementById('prompt-agente-parte1');
+            const p2 = document.getElementById('prompt-agente-parte2');
+            if (!p1 || !p2) return;
+            const textoCompleto = p1.innerText.trim() + "\n\n" + p2.innerText.trim();
+
+            const area = document.createElement('textarea');
+            area.value = textoCompleto;
+            document.body.appendChild(area);
+            area.select();
+            document.execCommand('copy');
+            document.body.removeChild(area);
+
+            const toast = document.getElementById('toastCopiado');
+            toast.classList.remove('hidden');
+            setTimeout(() => toast.classList.add('hidden'), 2800);
+        }
+
+        function copiarPromptCompletoInvestigacion() {
+            const p1 = document.getElementById('prompt-investigacion-parte1');
+            const p2 = document.getElementById('prompt-investigacion-parte2');
+            if (!p1 || !p2) return;
+            const textoCompleto = p1.innerText.trim() + "\n\n" + p2.innerText.trim();
+
+            const area = document.createElement('textarea');
+            area.value = textoCompleto;
+            document.body.appendChild(area);
+            area.select();
+            document.execCommand('copy');
+            document.body.removeChild(area);
+
+            const toast = document.getElementById('toastCopiado');
+            toast.classList.remove('hidden');
+            setTimeout(() => toast.classList.add('hidden'), 2800);
+        }
+
+        /* =========================================================================
+           DATOS DE LOS 4 DEMOS CONVERSACIONALES DEL TALLER 2
+           ========================================================================= */
+        const demosBots = {
+            asistente: {
+                nombre: "Asistente Experto en Investigación en Enfermería",
+                saludo: "¡Hola! Soy tu Asistente de Investigación en Enfermería (Metodología, Epidemiología y EBE). Enviame tu borrador de pregunta, objetivo o diseño metodológico y te responderé siempre en 4 pasos estructurados:",
+                preguntas: [
+                    {
+                        q: "Revisar este objetivo general: 'Conocer si las enfermeras se lavan las manos en la UCI para concientizar al servicio'.",
+                        a: "1️⃣ Análisis:\nEl enunciado aborda una problemática prioritaria en seguridad del paciente, pero presenta debilidades en su formulación metodológica.\n\n2️⃣ Observaciones:\n• El verbo 'Conocer' es subjetivo y no es directamente observable ni medible.\n• 'Para concientizar al servicio' expresa una finalidad de gestión/educación y no forma parte del objetivo de investigación.\n• Falta delimitar la variable específica, el lugar y el período temporal.\n\n3️⃣ Sugerencias de mejora:\nReemplazar por un verbo medible (Determinar, Describir, Evaluar), precisar la variable ('adherencia a los 5 momentos de higiene de manos') e incorporar población, institución y período.\n\n4️⃣ Ejemplo corregido:\n'Determinar el nivel de adherencia a los cinco momentos para la higiene de manos en el personal de enfermería de la Unidad de Cuidados Intensivos del Hospital X durante el segundo semestre de 2026.'"
+                    },
+                    {
+                        q: "Quiero estudiar la relación entre las horas de guardia nocturna y el nivel de Burnout en enfermeros de emergencia. ¿Qué prueba estadística uso?",
+                        a: "1️⃣ Análisis:\nBuscás analizar la asociación entre dos variables cuantitativas medidas en una misma muestra de profesionales de enfermería.\n\n2️⃣ Observaciones:\n• Variable 1: Horas de guardia nocturna mensuales (cuantitativa continua/discreta).\n• Variable 2: Puntaje del cuestionario Maslach Burnout Inventory (cuantitativa/ordinal según categorización).\n\n3️⃣ Sugerencias de mejora:\nSi ambas variables se trabajan de forma numérica y tienen distribución normal, se recomienda correlación de Pearson. Si categorizás el Burnout (Bajo, Medio, Alto) y los rangos horarios, corresponde aplicar la prueba de Chi cuadrado (χ²) de independencia.\n\n4️⃣ Ejemplo corregido (Redacción para el apartado de Análisis Estadístico):\n'Para evaluar la asociación entre la carga horaria nocturna categorizada y el nivel de síndrome de Burnout se aplicará la prueba de Chi cuadrado de Pearson, adoptando un nivel de significancia estadística de p < 0,05.'"
+                    }
+                ]
+            },
+            agente: {
+                nombre: "Agente Especializado • Ayudante de Cátedra (Proyectos ChatGPT)",
+                saludo: "Hola, Profe. Ya leí la configuración de la asignatura 'Enfermería del Adulto y Anciano' (2.º año) y el archivo PDF cargado sobre Valoración Respiratoria. ¿Qué propuesta de actividad querés que diseñe hoy?",
+                preguntas: [
+                    {
+                        q: "Proponé un caso práctico breve sobre selección de dispositivos de oxigenoterapia para trabajar en grupos.",
+                        a: "📌 PROPUESTA DE ACTIVIDAD:\n• Nombre y tipo: 'Decidir con fundamento en el Box de Guardia' (Caso práctico grupal).\n• Objetivo de aprendizaje: Que el estudiantado logre seleccionar el dispositivo de oxigenoterapia acorde al requerimiento de FiO₂ y fundamentar los cuidados autónomos de enfermería.\n• Consigna: En grupos de 3 integrantes, analicen la situación simulada (elaboración propia para esta actividad) de un paciente con SatO₂ 89% y FR 28 rpm, e indiquen qué datos adicionales deben valorar y por qué una cánula nasal a >4 L/min no es recomendable sin humidificación.\n• Fundamento bibliográfico: Se vincula con los criterios de bajo y alto flujo y prevención de lesiones de mucosa descritos en el Manual de Cuidados Respiratorios de la Cátedra (Cap. 3, págs. 14-18)."
+                    },
+                    {
+                        q: "Armá una actividad sobre destete de ventilación mecánica invasiva.",
+                        a: "⚠️ LÍMITE DE BIBLIOGRAFÍA DETECTADO:\nEn los archivos cargados actualmente en este Proyecto solo cuento con el capítulo de Oxigenoterapia No Invasiva (Cap. 3). Conocer el tema no significa disponer de la obra de referencia de tu cátedra sobre Ventilación Mecánica Invasiva. Por favor, adjuntá el texto o guía correspondiente para que pueda elaborar propuestas fundamentadas sin inventar citas."
+                    }
+                ]
+            },
+            repaso: {
+                nombre: "Chatbot Entrenador de Repaso • Oxigenoterapia",
+                saludo: "¡Hola! Vamos a repasar Oxigenoterapia antes del parcial. Te planteo una situación: Si un paciente tiene indicada una Cánula Nasal a 6 L/min de forma continua, ¿qué le responderías al equipo?",
+                preguntas: [
+                    {
+                        q: "Le coloco la cánula a 6 L/min sin problemas para que suba rápido la saturación.",
+                        a: "💡 PISTA PEDAGÓGICA DEL BOT: ¡Pensá en la mucosa nasal! En adultos, flujos superiores a 4 L/min por cánula nasal no aumentan significativamente la FiO₂ y provocan sequedad, irritación de la mucosa y epistaxis. Si el paciente requiere mayor aporte, ¿qué deberíamos proponer? 📖 Fuente: Guía de Oxigenoterapia, Sección Cánula Nasal, pág. 6."
+                    },
+                    {
+                        q: "Advierto que en cánula nasal convencional el flujo máximo recomendado es de 4 L/min y evalúo cambiar a una máscara facial si requiere mayor FiO₂.",
+                        a: "✅ ¡Respuesta fundamentada! En cánula nasal estándar trabajamos entre 1 y 4 L/min. Si la hipoxemia persiste, corresponde escalar a un dispositivo de mayor entrega de FiO₂ (como máscara simple o máscara Venturi) en lugar de forzar el flujo nasal. 📖 Fuente: Guía de Oxigenoterapia, pág. 6."
+                    }
+                ]
+            },
+            tutor: {
+                nombre: "Tutor Inteligente Socrático • Caso Carlos (68 años)",
+                saludo: "🩺 Entramos al Box 04. Carlos (68 años) está en posición horizontal, inquieto, con FR 28 rpm, SatO₂ 89% y tiraje intercostal. Como enfermero/a a cargo, ¿cuál es tu PRIMERA intervención autónoma mientras preparás el dispositivo de oxígeno?",
+                preguntas: [
+                    {
+                        q: "Voy a buscar primero el carro de paro para intubarlo de inmediato.",
+                        a: "🤔 REPREGUNTA SOCRÁTICA DEL TUTOR: Observá primero el estado de conciencia de Carlos: está lúcido, agitado y en posición totalmente horizontal en la cama. Antes de pensar en una vía aérea invasiva, ¿qué cambio postural autónomo de enfermería mejora de inmediato la excursión diafragmática?"
+                    },
+                    {
+                        q: "Coloco la cabecera de la cama en posición Semi-Fowler / Fowler (30° a 45°), tranquilizo al paciente y verifico permeabilidad de vía aérea.",
+                        a: "🏆 ¡Excelente razonamiento clínico! La posición Fowler/Semi-Fowler desciende las vísceras abdominales por gravedad, favorece la expansión pulmonar y disminuye el trabajo respiratorio de manera inmediata. Ahora sí, con el paciente bien posicionado, seleccionamos el dispositivo de oxígeno. 📖 Fuente: Manual de Cuidados Respiratorios de Enfermería, pág. 11."
+                    }
+                ]
+            }
+        };
+
+        let botActualKey = 'asistente';
+
+        function abrirSimuladorBots(key = 'asistente') {
+            document.getElementById('modalBots').classList.remove('hidden');
+            cambiarBotDemo(key);
+        }
+
+        function cerrarSimuladorBots() {
+            document.getElementById('modalBots').classList.add('hidden');
+        }
+
+        function cambiarBotDemo(key) {
+            botActualKey = key;
+            ['asistente', 'agente', 'repaso', 'tutor'].forEach(k => {
+                const btn = document.getElementById('tab-' + k);
+                if (k === key) {
+                    btn.className = "px-3 py-1.5 rounded-xl text-xs font-extrabold pink-pill cursor-pointer";
+                } else {
+                    btn.className = "px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-700 border border-pink-200 hover:bg-pink-100 cursor-pointer";
+                }
+            });
+
+            const data = demosBots[key];
+            const chatArea = document.getElementById('chatAreaDemo');
+            chatArea.innerHTML = `
+                <div class="flex gap-3 items-start">
+                    <span class="w-8 h-8 rounded-full pink-pill flex items-center justify-center shrink-0">🤖</span>
+                    <div class="bg-white p-4 rounded-2xl rounded-tl-none shadow-sm border border-pink-200 text-slate-800">
+                        <span class="block text-[10px] font-extrabold text-[#e6007e] uppercase mb-1">${data.nombre}</span>
+                        <p>${data.saludo}</p>
+                    </div>
+                </div>
+            `;
+
+            const opcionesArea = document.getElementById('opcionesAreaDemo');
+            opcionesArea.innerHTML = `<span class="block text-[11px] font-bold text-slate-500 uppercase">Elegí una intervención para probar la respuesta del Bot:</span>`;
+            data.preguntas.forEach((item, idx) => {
+                const btn = document.createElement('button');
+                btn.className = "w-full text-left p-3 rounded-xl bg-pink-50 hover:bg-pink-100 border border-pink-200 text-xs font-semibold text-slate-800 transition cursor-pointer";
+                btn.textContent = "💬 " + item.q;
+                btn.onclick = () => responderEnDemo(idx);
+                opcionesArea.appendChild(btn);
+            });
+        }
+
+        function responderEnDemo(indice) {
+            const data = demosBots[botActualKey];
+            const item = data.preguntas[indice];
+            const chatArea = document.getElementById('chatAreaDemo');
+
+            // Mensaje del usuario
+            const divUser = document.createElement('div');
+            divUser.className = "flex justify-end";
+            divUser.innerHTML = `<div class="pink-pill p-3.5 rounded-2xl rounded-tr-none max-w-lg text-xs shadow-sm"></div>`;
+            divUser.querySelector('div').textContent = item.q;
+            chatArea.appendChild(divUser);
+
+            // Respuesta del Bot
+            const divBot = document.createElement('div');
+            divBot.className = "flex gap-3 items-start";
+            divBot.innerHTML = `
+                <span class="w-8 h-8 rounded-full pink-pill flex items-center justify-center shrink-0">🤖</span>
+                <div class="bg-white p-4 rounded-2xl rounded-tl-none shadow-sm border border-pink-200 text-slate-800 max-w-xl whitespace-pre-line"></div>
+            `;
+            divBot.querySelector('div').textContent = item.a;
+            chatArea.appendChild(divBot);
+
+            chatArea.scrollTop = chatArea.scrollHeight;
+        }
+    </script>
+</body>
+</html>
